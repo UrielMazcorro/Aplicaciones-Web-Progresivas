@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PRISN3D - Home</title>
+  <link rel="stylesheet" href="/assets/css/home.css" />
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#673ab7">
+
+</head>
+<body>
+  <header class="main-header">
+    <img src="/assets/imagenes/logo-64.png" alt="Logo PRISN3D" class="logo" />
+    <nav>
+      <a href="#quienes-somos">Quiénes Somos</a>
+      <a href="#beneficios">Beneficios</a>
+      <a href="#dashboard">Panel</a>
+      <button id="logout-btn">Cerrar Sesión</button>
+    </nav>
+  </header>
+
+  <section id="quienes-somos" class="info-section">
+    <h2>¿Quiénes Somos?</h2>
+    <p>En <strong>PRISN3D</strong> somos un equipo dedicado a optimizar el uso de impresoras 3D en entornos educativos e industriales. Nuestro sistema permite monitorear, administrar y controlar los equipos en tiempo real desde una sola plataforma.</p>
+  </section>
+
+  <section id="beneficios" class="info-section">
+    <h2>Beneficios</h2>
+    <div class="benefits-grid">
+      <div class="benefit"><h3>🔧 Mantenimiento inteligente</h3><p>Recibe alertas cuando tus impresoras necesiten revisión o limpieza.</p></div>
+      <div class="benefit"><h3>📊 Monitoreo en tiempo real</h3><p>Consulta el estado y el rendimiento de cada impresora desde el panel.</p></div>
+      <div class="benefit"><h3>👩‍💻 Roles diferenciados</h3><p>Permite acceso personalizado para administradores, técnicos y operadores.</p></div>
+    </div>
+  </section>
+
+  <section id="dashboard" class="dashboard-container">
+    <h2>Panel de Control</h2>
+
+    <nav class="tabs">
+      <button class="tab-button active" data-tab="#admin-view">Vista Administrador</button>
+      <button class="tab-button" data-tab="#operator-view">Vista Operador</button>
+    </nav>
+
+    <main>
+      <!-- ADMIN VIEW (se mantiene) -->
+      <div id="admin-view" class="tab-content active">
+        <h3>Panel de Administrador / Técnico</h3>
+        <div class="content-grid">
+          <div class="card">
+            <h4>Gestión de Impresoras</h4>
+            <ul>
+              <li>Ender-3 (Lab A): <strong>Activa</strong></li>
+              <li>Prusa MK3 (Lab B): <strong>En Pausa</strong></li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>Estadísticas</h4>
+            <ul>
+              <li>Uso promedio: <strong>75%</strong></li>
+              <li>Material gastado: <strong>3.2 kg</strong></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- OPERATOR VIEW (aquí está la simulación) -->
+      <div id="operator-view" class="tab-content">
+        <h3>Panel de Operador</h3>
+        <div class="content-grid">
+          <div class="card">
+            <h4>Estado de Impresoras</h4>
+            <ul>
+              <li id="estado-impresora">Ender-3: <strong>Iniciando...</strong></li>
+              <li>Cama: <strong id="temp-cama">60.0°C</strong></li>
+              <li>Boquilla: <strong id="temp-boquilla">200.0°C</strong></li>
+              <li><strong id="tiempo-restante">Tiempo restante: 15:00</strong></li>
+            </ul>
+
+            <div class="progress-container" style="margin-top:10px;">
+              <div id="progress-bar" style="width:0%;height:18px;background:#673ab7;border-radius:10px;transition:width 0.8s linear;"></div>
+            </div>
+            <p id="progress-text" style="margin-top:8px;">Progreso: 0.0%</p>
+          </div>
+
+          <div class="card">
+            <h4>Control Remoto</h4>
+            <button id="pause-btn">⏸️ Pausar</button>
+            <button id="resume-btn" disabled>▶️ Reanudar</button>
+            <button id="cancel-btn">🛑 Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </section>
+
+  <footer><p>© 2025 PRISN3D - Todos los derechos reservados</p></footer>
+
+  <!-- carga el script (asegúrate de usar servidor local) -->
+  <script type="module" src="/assets/js/home.js"></script>
+  <script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker
+      .register("/service-worker.js")
+      .then(() => console.log("Service Worker registrado correctamente"))
+      .catch(err => console.error("Error al registrar el Service Worker:", err));
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "PRISN3D",
+  "short_name": "PRISN3D",
+  "start_url": "/assets/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#673ab7",
+  "icons": [
+    {
+      "src": "/assets/imagenes/logo-64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/imagenes/logo-256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ]
+}

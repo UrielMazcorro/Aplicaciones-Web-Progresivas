@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PRISN3D - Panel Principal</title>
+    <link rel="stylesheet" href="/frontend/css/home.css" />
+    <link rel="manifest" href="/frontend/manifest.json">
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-logo">
+            <img src="/frontend/imagenes/logo.png" alt="Logo PRISN3D" />
+            <h1>PRISN3D</h1>
+        </div>
+        <nav>
+            <a href="/frontend/home.html" class="active">Panel de Control</a>
+            <button id="logout-btn">Cerrar Sesión</button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div id="dashboard-container">
+        <div class="data-column">
+            <h2>Logs del Sensor DHT11</h2>
+            <ol id="log-list">
+            <li style="text-align: center; color: #888;">Cargando logs...</li>
+            </ol>
+        </div>
+
+        <div class="data-column">
+            <h2>Gráfica de Sensores (Últimos 15)</h2>
+        <div id="chart-container">
+            <canvas id="sensor-chart"></canvas>
+        </div>
+        </div>
+    </div>
+
+    <section id="printer-monitoring-section" class="info-section">
+        <h2>Monitor de Impresoras y Ambiente</h2>
+
+        <div class="printer-grid">
+        <!-- Impresoras base -->
+        <div class="printer-card" id="printer-1">
+            <h3>Ambiente del Taller</h3>
+          <ul>
+            <li><strong>Regla Temp:</strong> 20°C - 22°C</li>
+            <li><strong>Regla Hum:</strong> 10% - 60%</li>
+          </ul>
+          <div class="status-monitor">
+            <h4>
+              Estado:
+              <label class="toggle-switch">
+                <input type="checkbox" class="printer-toggle" data-doc-id="printer-1" />
+                <span class="slider"></span>
+              </label>
+            </h4>
+            <div class="status-dot status-offline"></div>
+            <span class="status-text">Desactivado</span>
+            <div class="live-data">
+              <p>Temp: <strong class="live-temp">--.- °C</strong></p>
+              <p>Hum: <strong class="live-hum">-- %</strong></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="printer-card" id="printer-2">
+            <h3>Ender 3 V2</h3>
+            <ul>
+                <li><strong>Regla Temp:</strong> 23°C - 25°C</li>
+                <li><strong>Regla Hum:</strong> 10% - 60%</li>
+            </ul>
+            <div class="status-monitor">
+            <h4>
+                Estado:
+                <label class="toggle-switch">
+                    <input type="checkbox" class="printer-toggle" data-doc-id="printer-2" />
+                    <span class="slider"></span>
+                </label>
+            </h4>
+            <div class="status-dot status-offline"></div>
+            <span class="status-text">Desactivado</span>
+            <div class="live-data">
+              <p>Temp: <strong class="live-temp">--.- °C</strong></p>
+              <p>Hum: <strong class="live-hum">-- %</strong></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="printer-card" id="printer-3">
+          <h3>Prusa i3 MK3S+</h3>
+          <ul>
+            <li><strong>Regla Temp:</strong> 26°C - 29°C</li>
+            <li><strong>Regla Hum:</strong> 10% - 60%</li>
+          </ul>
+          <div class="status-monitor">
+            <h4>
+              Estado:
+              <label class="toggle-switch">
+                <input type="checkbox" class="printer-toggle" data-doc-id="printer-3" />
+                <span class="slider"></span>
+              </label>
+            </h4>
+            <div class="status-dot status-offline"></div>
+            <span class="status-text">Desactivado</span>
+            <div class="live-data">
+              <p>Temp: <strong class="live-temp">--.- °C</strong></p>
+              <p>Hum: <strong class="live-hum">-- %</strong></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="printer-card" id="printer-4">
+          <h3>Artillery Sidewinder X2</h3>
+          <ul>
+            <li><strong>Regla Temp:</strong> 29°C - 40°C</li>
+            <li><strong>Regla Hum:</strong> 10% - 60%</li>
+          </ul>
+          <div class="status-monitor">
+            <h4>
+              Estado:
+              <label class="toggle-switch">
+                <input type="checkbox" class="printer-toggle" data-doc-id="printer-4" />
+                <span class="slider"></span>
+              </label>
+            </h4>
+            <div class="status-dot status-offline"></div>
+            <span class="status-text">Desactivado</span>
+            <div class="live-data">
+              <p>Temp: <strong class="live-temp">--.- °C</strong></p>
+              <p>Hum: <strong class="live-hum">-- %</strong></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="printer-card add-printer-card" id="show-add-modal-btn">
+          <h3>+</h3>
+          <h3>Añadir Nueva Impresora</h3>
+        </div>
+
+        <div id="firestore-printer-list" class="printer-grid-dynamic"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal de agregar/editar impresoras -->
+  <div id="add-printer-modal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" id="modal-close-btn">&times;</span>
+
+      <h3 id="modal-title">Añadir Nueva Impresora</h3>
+
+      <p>Rellena los campos manualmente o selecciona un preajuste.</p>
+
+      <div>
+        <strong>Preajustes:</strong>
+        <button type="button" class="preset-btn" data-name="Ender 3 Pro" data-type="FDM" data-volume="220x220x250">Ender 3 Pro</button>
+        <button type="button" class="preset-btn" data-name="Anycubic Photon" data-type="Resina (SLA)" data-volume="115x65x155">Anycubic Photon</button>
+        <button type="button" class="preset-btn" data-name="Prusa i3 MK3S+" data-type="FDM" data-volume="250x210x210">Prusa i3 MK3S+</button>
+        <button type="button" class="preset-btn" data-name="Creality CR-10" data-type="FDM" data-volume="300x300x400">Creality CR-10</button>
+        <button type="button" class="preset-btn" data-name="Elegoo Mars 3" data-type="Resina (SLA)" data-volume="143x89x175">Elegoo Mars 3</button>
+        <button type="button" class="preset-btn" data-name="Artillery Sidewinder X2" data-type="FDM" data-volume="300x300x400">Artillery Sidewinder X2</button>
+      </div>
+
+      <hr style="margin: 15px 0" />
+
+      <form id="add-printer-form">
+        <input type="text" id="new-printer-name" placeholder="Nombre de la Impresora" required />
+        <input type="text" id="new-printer-type" placeholder="Tipo (Ej: FDM)" required />
+        <input type="text" id="new-printer-volume" placeholder="Volumen (Ej: 220x220x250 mm)" required />
+        
+        <strong>Reglas de Ambiente (opcional):</strong>
+        <div class="rule-inputs">
+          <input type="number" id="new-min-temp" placeholder="Temp. Mín (°C)" />
+          <input type="number" id="new-max-temp" placeholder="Temp. Máx (°C)" />
+          <input type="number" id="new-min-hum" placeholder="Hum. Mín (%)" />
+          <input type="number" id="new-max-hum" placeholder="Hum. Máx (%)" />
+        </div>
+
+        <button type="submit" id="modal-submit-btn">Añadir Impresora</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script type="module" src="/frontend/js/main.js"></script>
+  <script type="module" src="/frontend/js/home.js"></script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+/* ============================
+   ESTILO BASE MODERNO
+============================ */
+body {
+    margin: 0;
+    font-family: "Inter", Arial, sans-serif;
+    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    color: #1e293b;
+}
+
+/* ============================
+   HEADER
+============================ */
+.qs-header {
+    background: linear-gradient(135deg, #111827, #1f2937);
+    color: white;
+    padding: 18px 35px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+
+    box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-logo img {
+    width: 60px;
+    filter: drop-shadow(0 3px 4px rgba(0,0,0,0.3));
+}
+
+/* Botón de login */
+nav button {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    border: none;
+    color: white;
+    padding: 11px 22px;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.25s;
+    box-shadow: 0 3px 12px rgba(79,70,229,0.45);
+}
+
+nav button:hover {
+    background: #4338ca;
+    transform: translateY(-2px);
+}
+
+/* ============================
+   CONTENEDORES
+============================ */
+.qs-container {
+    padding: 45px;
+    max-width: 1100px;
+    margin: auto;
+}
+
+/* Tarjetas generales */
+.qs-card {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(10px);
+    padding: 35px;
+    border-radius: 20px;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    margin-bottom: 45px;
+
+    border: 1px solid rgba(255,255,255,0.4);
+}
+
+.qs-card h2, 
+.qs-card h3 {
+    color: #0f172a;
+    font-weight: 700;
+}
+
+.qs-card p {
+    line-height: 1.7;
+    color: #334155;
+}
+
+/* ============================
+   TEAM (Tarjetas del equipo)
+============================ */
+.team-grid {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.team-card {
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(12px);
+    padding: 22px;
+    width: 240px;
+    border-radius: 18px;
+    text-align: center;
+
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    border: 1px solid rgba(255,255,255,0.5);
+
+    transition: 0.25s;
+}
+
+.team-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+}
+
+.team-card img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 12px;
+}
+
+/* ============================
+   BOTÓN PRINCIPAL
+============================ */
+.qs-center {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    padding: 14px 28px;
+    font-size: 17px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+
+    box-shadow: 0 6px 18px rgba(37,99,235,0.35);
+    transition: 0.25s;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+/* ============================
+   FOOTER
+============================ */
+footer {
+    text-align: center;
+    padding: 22px;
+    margin-top: 50px;
+    background: #e2e8f0;
+    color: #475569;
+    font-size: 15px;
+    border-top: 1px solid #cbd5e1;
+}
+
+/* ============================
+   RESPONSIVE
+============================ */
+
+/* Tablets */
+@media (max-width: 900px) {
+    .qs-container {
+        padding: 25px;
+    }
+
+    .qs-card {
+        padding: 28px;
+    }
+
+    .team-card {
+        width: 45%;
+        min-width: 200px;
+    }
+
+    .qs-header {
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+/* Móviles */
+@media (max-width: 600px) {
+    body {
+        background: #f1f5f9;
+    }
+
+    .qs-header {
+        padding: 15px;
+    }
+
+    .qs-container {
+        padding: 15px;
+    }
+
+    .qs-card {
+        padding: 22px;
+    }
+
+    .team-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .team-card {
+        width: 90%;
+        max-width: 320px;
+    }
+
+    .btn-primary {
+        width: 90%;
+        max-width: 320px;
+        padding: 14px;
+    }
+}
+
+/* Muy pequeño */
+@media (max-width: 360px) {
+    .header-logo img {
+        width: 45px;
+    }
+
+    nav button {
+        padding: 8px 15px;
+    }
+}

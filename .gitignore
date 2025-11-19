@@ -1,0 +1,4 @@
+# Ignorar clave privada de Firebase
+/backend/clave-firebase.json
+.env
+serviceAccountKey.json

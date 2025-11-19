@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRISN3D - Quiénes Somos</title>
+
+    <link rel="stylesheet" href="/frontend/css/quienes.css">
+    <link rel="manifest" href="/frontend/manifest.json">
+</head>
+
+<body>
+
+    <header class="qs-header">
+        <div class="header-logo">
+            <img src="/frontend/imagenes/logo.png" alt="Logo PRISN3D"> 
+            <h1>PRISN3D</h1>
+        </div>
+
+        <nav>
+            <button id="go-login">Iniciar Sesión / Registrarse</button>
+        </nav>
+    </header>
+
+    <main class="qs-container">
+
+        <section class="qs-card">
+            <h2>Quiénes Somos</h2>
+
+            <p>
+                En <strong>PRISN3D</strong> desarrollamos soluciones inteligentes de monitoreo para impresoras 3D,
+                control ambiental y automatización de talleres y entornos de producción.
+            </p>
+
+            <p>
+                Nuestra tecnología está diseñada para ser accesible, moderna y fácil de usar,
+                permitiendo a creadores, escuelas y empresas mejorar su productividad.
+            </p>
+
+            <h3>Misión</h3>
+            <p>
+                Optimizar los procesos de impresión 3D mediante análisis de datos, automatización
+                y monitoreo en tiempo real.
+            </p>
+
+            <h3>Visión</h3>
+            <p>
+                Ser la plataforma líder de gestión y monitoreo de impresión 3D en Latinoamérica.
+            </p>
+        </section>
+
+        <section class="qs-team">
+            <h2>Equipo</h2>
+
+            <div class="team-grid">
+                <div class="team-card">
+                    <img src="/frontend/imagenes/logo.png" alt="Equipo">
+                    <h4>Fundador</h4>
+                    <p>Especialista en impresión 3D y procesos digitales.</p>
+                </div>
+
+                <div class="team-card">
+                    <img src="/frontend/imagenes/logo.png" alt="Equipo">
+                    <h4>Ingeniería</h4>
+                    <p>Desarrollo de software y sistemas inteligentes.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="qs-center">
+            <button class="btn-primary" id="btn-ir-login">Ir al Login</button>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>© 2025 PRISN3D - Todos los derechos reservados.</p>
+    </footer>
+
+
+    <script>
+        
+        document.getElementById("go-login").onclick = () => {
+            window.location.href = "/frontend/index.html";
+        };
+
+        document.getElementById("btn-ir-login").onclick = () => {
+            window.location.href = "/frontend/index.html";
+        };
+    </script>
+
+</body>
+</html>

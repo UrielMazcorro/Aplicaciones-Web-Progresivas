@@ -6,31 +6,38 @@ const admin = require('firebase-admin');
 const axios = require('axios');
 const app = express();
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// 1. CLAVE API PARA LOGIN (Desde .env)
+// 1. CLAVE API PARA LOGIN (Desde Render ENV)
 const API_KEY = process.env.FIREBASE_API_KEY;
-if (!API_KEY) console.error("ERROR: Falta FIREBASE_API_KEY en .env");
+if (!API_KEY) console.error("ERROR: Falta FIREBASE_API_KEY en variables de entorno");
 
-// 2. CONFIGURAR FIREBASE ADMIN
+// 2. CONFIGURAR FIREBASE ADMIN (SIN ARCHIVO)
 try {
-    const serviceAccount = require('./serviceAccountKey.json');
+    if (!process.env.SERVICE_ACCOUNT) {
+        throw new Error("Falta SERVICE_ACCOUNT en variables de entorno");
+    }
+
+    // Parseamos la variable con el JSON real
+    const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT);
+
     admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
         databaseURL: "https://prisn3d-int-default-rtdb.firebaseio.com"
     });
-    console.log("Firebase Admin conectado.");
+
+    console.log("Firebase Admin conectado usando Render ENV.");
 } catch (error) {
-    console.error("ERROR: Falta 'serviceAccountKey.json'");
+    console.error("ERROR al inicializar Firebase Admin:", error.message);
 }
 
-const db = admin.database(); // Realtime Database
-const firestore = admin.firestore(); // Firestore
+const db = admin.database();
+const firestore = admin.firestore();
 
 app.use(express.json());
 app.use('/frontend', express.static(path.join(__dirname, 'frontend')));
 
-// --- RUTA: LOGIN ---
+// --- LOGIN ---
 app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -45,14 +52,11 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-// --- RUTA: REGISTRO DE USUARIOS ---
+// --- REGISTRO ---
 app.post('/api/register', async (req, res) => {
     const { email, password } = req.body;
     try {
-        const userRecord = await admin.auth().createUser({
-            email: email,
-            password: password
-        });
+        await admin.auth().createUser({ email, password });
         console.log(`Usuario creado: ${email}`);
         res.json({ success: true });
     } catch (error) {
@@ -61,24 +65,26 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
-// --- RUTA: GUARDAR IMPRESORA (CREATE) ---
+// --- CREATE ---
 app.post('/api/impresoras', async (req, res) => {
     try {
         const docRef = await firestore.collection('impresoras_custom').add({
             ...req.body,
             createdAt: admin.firestore.FieldValue.serverTimestamp()
         });
-        // Crear estado inicial en la colección paralela
+
         await firestore.collection('impresoras_estado').doc(docRef.id).set({
-            isActive: false, statusText: "Desactivada"
+            isActive: false,
+            statusText: "Desactivada"
         });
+
         res.json({ success: true, id: docRef.id });
     } catch (error) {
         res.status(500).json({ success: false, error: "Error al guardar" });
     }
 });
 
-// --- RUTA: OBTENER IMPRESORAS (READ) ---
+// --- READ ---
 app.get('/api/impresoras', async (req, res) => {
     try {
         const snapshot = await firestore.collection('impresoras_custom').get();
@@ -90,16 +96,17 @@ app.get('/api/impresoras', async (req, res) => {
     }
 });
 
-// --- RUTA: EDITAR IMPRESORA (UPDATE) --- 
-// (Esta faltaba en tu código anterior)
+// --- UPDATE ---
 app.put('/api/impresoras/:id', async (req, res) => {
     const { id } = req.params;
     const datos = req.body;
+
     try {
         await firestore.collection('impresoras_custom').doc(id).update({
             ...datos,
             updatedAt: admin.firestore.FieldValue.serverTimestamp()
         });
+
         console.log(`Impresora actualizada: ${id}`);
         res.json({ success: true });
     } catch (error) {
@@ -108,16 +115,14 @@ app.put('/api/impresoras/:id', async (req, res) => {
     }
 });
 
-// --- RUTA: ELIMINAR IMPRESORA (DELETE) --- 
-// (Esta también faltaba)
+// --- DELETE ---
 app.delete('/api/impresoras/:id', async (req, res) => {
     const { id } = req.params;
+
     try {
-        // Borramos la info de la impresora
         await firestore.collection('impresoras_custom').doc(id).delete();
-        // Borramos su estado de monitoreo (limpieza)
         await firestore.collection('impresoras_estado').doc(id).delete();
-        
+
         console.log(`Impresora eliminada: ${id}`);
         res.json({ success: true });
     } catch (error) {
@@ -126,7 +131,7 @@ app.delete('/api/impresoras/:id', async (req, res) => {
     }
 });
 
-// --- RUTA: SENSORES ---
+// --- SENSORES ---
 app.get('/api/sensores', async (req, res) => {
     try {
         const ref = db.ref('sensores/dht11/logs').limitToLast(15);
@@ -142,8 +147,6 @@ app.get('/', (req, res) => res.redirect('/frontend/quienes-somos.html'));
 
 app.listen(PORT, () => {
     console.log(`------------------------------------------------`);
-    console.log(`Servidor Proxy Full corriendo en: http://localhost:${PORT}`);
-    console.log(`   - CRUD de Impresoras: ACTIVO`);
-    console.log(`   - Registro y Login: ACTIVO`);
+    console.log(`Servidor corriendo en puerto: ${PORT}`);
     console.log(`------------------------------------------------`);
 });

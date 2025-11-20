@@ -1,21 +1,23 @@
-# 1. Usamos una imagen base de Node.js ligera (Alpine Linux)
+# Imagen base
 FROM node:18-alpine
 
-# 2. Creamos la carpeta de trabajo dentro del contenedor
+# Carpeta de trabajo
 WORKDIR /app
 
-# 3. Copiamos primero los archivos de dependencias (para aprovechar la caché)
+# Copiar solo dependencias
 COPY package*.json ./
 
-# 4. Instalamos las dependencias dentro del contenedor
+# Instalar dependencias
 RUN npm install
 
-# 5. Copiamos el resto del código (server.js, carpeta frontend, credenciales)
-# OJO: Esto copiará tu .env y serviceAccountKey.json al contenedor
-COPY . .
+# Copiar SOLO lo necesario para producción
+COPY server.js ./server.js
+COPY frontend ./frontend
 
-# 6. Le decimos a Docker que nuestra app usa el puerto 3000
+# NO copiamos .env
+# NO copiamos serviceAccountKey.json
+# NO copiamos otros archivos sensibles
+
 EXPOSE 3000
 
-# 7. Comando para iniciar la aplicación
 CMD ["node", "server.js"]

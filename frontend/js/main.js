@@ -21,4 +21,4 @@ export function logout() {
     localStorage.removeItem('usuario_prisn3d');
     alert("Has cerrado sesión.");
     window.location.href = '/frontend/quienes-somos.html';
-}
+} 

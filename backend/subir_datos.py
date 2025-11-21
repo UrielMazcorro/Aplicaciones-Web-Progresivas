@@ -1,101 +1,94 @@
 import serial
 import time
-import re # Para "descifrar" el texto
+import re
+import requests
 import firebase_admin
 from firebase_admin import credentials, db
 
 # ---------------------------------------------------------------
-# CONFIGURACIÓN DE FIREBASE (¡DEBES CAMBIAR ESTO!)
+# CONFIGURACIÓN FIREBASE (Opcional)
 # ---------------------------------------------------------------
-# 1. Asegúrate de que tu archivo 'clave-firebase.json' esté en la misma carpeta
 cred = credentials.Certificate('clave-firebase.json')
 
-# 2. Ve a Realtime Database y copia la URL (ej: https://mi-proyecto-default-rtdb.firebaseio.com/)
+# URL de tu Realtime Database de Firebase
 DATABASE_URL = 'https://prisn3d-int-default-rtdb.firebaseio.com/' 
 
 firebase_admin.initialize_app(cred, {
     'databaseURL': DATABASE_URL
 })
 
-# ---------------------------------------------------------------
-# CONFIGURACIÓN DEL ARDUINO (¡DEBES CAMBIAR ESTO!)
-# ---------------------------------------------------------------
-# 3. Revisa en tu Arduino IDE qué puerto estás usando (ej. COM3, COM5, etc.)
-ARDUINO_PORT = 'COM3' 
-BAUD_RATE = 9600
-
-# Rutas de Firebase
 ref_latest = db.reference('sensores/dht11/latest')
 ref_logs = db.reference('sensores/dht11/logs')
 
+# ---------------------------------------------------------------
+# CONFIGURACIÓN DEL ARDUINO
+# ---------------------------------------------------------------
+ARDUINO_PORT = 'COM3'  # Cambia al puerto donde está tu Arduino
+BAUD_RATE = 9600
+
+# ---------------------------------------------------------------
+# CONFIGURACIÓN DEL SERVIDOR EN RENDER
+# ---------------------------------------------------------------
+SERVER_URL = 'https://aplicaciones-web-progresivas-as15.onrender.com/api/sensores'
+
+# ---------------------------------------------------------------
+# INICIO CONEXIÓN
+# ---------------------------------------------------------------
 print(f"Conectando a {ARDUINO_PORT}...")
 
 try:
-    # Intenta conectar al puerto
     arduino = serial.Serial(port=ARDUINO_PORT, baudrate=BAUD_RATE, timeout=1)
-    print("¡Conectado! Escuchando datos del Arduino...")
+    print("¡Conectado al Arduino! Escuchando datos...")
 
     while True:
-        # Lee una línea completa desde el Arduino
         linea_bytes = arduino.readline()
-        
-        # Si la línea no está vacía, la procesamos
         if linea_bytes:
-            # Decodifica de bytes a string (texto)
             linea = linea_bytes.decode('utf-8').strip()
-            
-            # ---------------------------------------------------------------
-            # ¡¡AQUÍ ESTÁ LA CORRECCIÓN!!
-            # Ahora buscamos "H:" y "T:"
-            # ---------------------------------------------------------------
+
             if "H:" in linea and "T:" in linea:
-                
                 try:
-                    # Usamos regex para extraer los números
-                    hum_match = re.search(r'H:([0-9.]+)', linea) # <-- CAMBIO
-                    temp_match = re.search(r'T:([0-9.]+)', linea) # <-- CAMBIO
+                    hum_match = re.search(r'H:([0-9.]+)', linea)
+                    temp_match = re.search(r'T:([0-9.]+)', linea)
 
                     if hum_match and temp_match:
-                        # Convertimos el texto extraído a números
                         humedad = float(hum_match.group(1))
                         temperatura = float(temp_match.group(1))
-                        
-                        # Obtenemos el tiempo actual en milisegundos
                         timestamp = int(time.time() * 1000)
 
-                        # Creamos el objeto de datos
                         data = {
                             'humedad': humedad,
                             'temperatura': temperatura,
                             'timestamp': timestamp
                         }
 
-                        # 1. Actualizamos el valor 'latest'
+                        # 1️⃣ Firebase (opcional)
                         ref_latest.set(data)
-                        
-                        # 2. Añadimos un nuevo registro a 'logs'
                         ref_logs.push(data)
 
-                        print(f"DATO SUBIDO: Temp={temperatura}°C, Hum={humedad}%")
-                    
+                        # 2️⃣ Enviar al servidor Render
+                        try:
+                            response = requests.post(SERVER_URL, json=data)
+                            if response.status_code == 200:
+                                print(f"✅ Dato enviado a Render: T={temperatura}°C, H={humedad}%")
+                            else:
+                                print(f"❌ Error Render {response.status_code}: {response.text}")
+                        except Exception as e:
+                            print(f"❌ Fallo al enviar a Render: {e}")
+
                 except Exception as e:
                     print(f"Error parseando la línea: {e}")
-            
-            # Imprime cualquier otra línea que no sea de datos
             else:
-                if linea: # Evita imprimir líneas vacías
+                if linea:
                     print(f"Arduino dice: {linea}")
 
-        # Pequeña pausa
         time.sleep(0.1)
 
 except serial.SerialException as e:
-    print(f"\n--- ERROR ---")
+    print("\n--- ERROR DE CONEXIÓN AL ARDUINO ---")
     print(f"No se pudo conectar al puerto '{ARDUINO_PORT}'.")
-    print("Verifica lo siguiente:")
-    print(f"1. ¿Está el Arduino conectado a ese puerto?")
-    print(f"2. ¿Escribiste bien el nombre del puerto en el script?")
-    print(f"3. ¿No tienes el 'Monitor Serial' del Arduino IDE abierto? (Solo un programa puede usar el puerto a la vez)")
+    print("Verifica:")
+    print("1. El Arduino está conectado al puerto correcto.")
+    print("2. Ningún otro programa (Monitor Serial IDE) está usando el puerto.")
     print(f"Error original: {e}")
 except Exception as e:
     print(f"Ha ocurrido un error inesperado: {e}")

@@ -34,18 +34,7 @@ let latestTemp = 0;
 let latestHum = 0;
 let editingId = null;
 
-// 4. POLLING DATOS
-async function fetchData() {
-    try {
-        const response = await fetch('/api/sensores');
-        const rawData = await response.json();
-        if (!rawData) return;
-        
-        const logsArray = Object.values(rawData).sort((a, b) => a.timestamp - b.timestamp);
-        actualizarInterfaz(logsArray);
-    } catch (error) { console.error("Error polling:", error); }
-}
-
+// 4. FUNCIONES DE INTERFAZ
 function actualizarInterfaz(logs) {
     const labels = [], temps = [], hums = [], listHTML = [];
     logs.forEach(log => {
@@ -91,8 +80,7 @@ function actualizarTarjetasImpresoras() {
             if (humEl) humEl.textContent = latestHum.toFixed(1) + " %";
 
             const cardId = card.id;
-            let rules = staticPrinterRules[cardId];
-            if (!rules && customPrinterRules[cardId]) rules = customPrinterRules[cardId];
+            let rules = staticPrinterRules[cardId] || customPrinterRules[cardId];
 
             let isWarning = false;
             if (rules) {
@@ -112,7 +100,7 @@ document.body.addEventListener('change', (e) => {
     if (e.target.classList.contains('printer-toggle')) actualizarTarjetasImpresoras();
 });
 
-// 6. CARGAR IMPRESORAS (READ) - AQUI ESTA EL CAMBIO VISUAL
+// 6. CARGAR IMPRESORAS (READ)
 async function cargarImpresorasGuardadas() {
     try {
         const res = await fetch('/api/impresoras');
@@ -128,7 +116,6 @@ async function cargarImpresorasGuardadas() {
             div.id = p.id;
             const datosJson = JSON.stringify(p).replace(/"/g, '&quot;');
 
-            // --- AQUI AGREGAMOS LAS REGLAS VISIBLES ---
             div.innerHTML = `
                 <h3>${p.name}</h3>
                 <div class="card-actions">
@@ -173,9 +160,7 @@ function agregarListenersBotones() {
                     const data = await res.json();
                     if (data.success) {
                         cargarImpresorasGuardadas();
-                    } else {
-                        alert("Error al eliminar");
-                    }
+                    } else { alert("Error al eliminar"); }
                 } catch (err) { alert("Error de conexión"); }
             }
         });
@@ -260,12 +245,10 @@ if (addForm) {
         try {
             let url = '/api/impresoras';
             let method = 'POST';
-            if (editingId) {
-                url = `/api/impresoras/${editingId}`;
-                method = 'PUT';
-            }
+            if (editingId) { url = `/api/impresoras/${editingId}`; method = 'PUT'; }
+
             const res = await fetch(url, {
-                method: method,
+                method,
                 headers: {'Content-Type':'application/json'},
                 body: JSON.stringify(data)
             });
@@ -275,14 +258,53 @@ if (addForm) {
                 modal.style.display = 'none';
                 addForm.reset();
                 cargarImpresorasGuardadas(); 
-            } else {
-                alert("Error servidor: " + result.error);
-            }
+            } else { alert("Error servidor: " + result.error); }
         } catch (e) { alert("Error conexión"); }
     });
 }
 
-// --- INICIO ---
-setInterval(fetchData, 3000);
-fetchData();
-cargarImpresorasGuardadas();
+// 11. SOCKET.IO REALTIME
+const socket = io();
+
+socket.on('sensor_update', data => {
+    if (!data) return;
+
+    latestTemp = data.temperatura;
+    latestHum = data.humedad;
+
+    // --- Actualizar gráfica
+    const timeStr = new Date().toLocaleTimeString('es-ES');
+    sensorChart.data.labels.push(timeStr);
+    sensorChart.data.datasets[0].data.push(latestTemp);
+    sensorChart.data.datasets[1].data.push(latestHum);
+
+    if(sensorChart.data.labels.length > 15) {
+        sensorChart.data.labels.shift();
+        sensorChart.data.datasets[0].data.shift();
+        sensorChart.data.datasets[1].data.shift();
+    }
+    sensorChart.update();
+
+    // --- Actualizar logs
+    const newLog = document.createElement('li');
+    newLog.textContent = `[${timeStr}] T: ${latestTemp}°C | H: ${latestHum}%`;
+    logListElement.prepend(newLog);
+
+    // --- Actualizar tarjetas
+    actualizarTarjetasImpresoras();
+});
+
+// 12. INICIALIZACIÓN
+// fetch inicial de histórico
+(async () => {
+    try {
+        const response = await fetch('/api/sensores');
+        const rawData = await response.json();
+        if(rawData) {
+            const logsArray = Object.values(rawData).sort((a,b)=>a.timestamp-b.timestamp);
+            actualizarInterfaz(logsArray);
+        }
+    } catch(e){ console.error(e); }
+
+    cargarImpresorasGuardadas();
+})();

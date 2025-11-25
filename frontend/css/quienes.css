@@ -1,43 +1,41 @@
 /* ============================
-   ESTILO BASE MODERNO
-============================ */
+   ESTILO BASE MINIMALISTA
+============================= */
 body {
     margin: 0;
     font-family: "Inter", Arial, sans-serif;
-    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    background: #f5f7fa;
     color: #1e293b;
+    line-height: 1.6;
 }
 
 /* ============================
    HEADER
-============================ */
+============================= */
 .qs-header {
-    background: linear-gradient(135deg, #111827, #1f2937);
-    color: white;
+    background: white;
     padding: 18px 35px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid #e5e7eb;
 }
 
 .header-logo {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
 }
 
 .header-logo img {
-    width: 60px;
-    filter: drop-shadow(0 3px 4px rgba(0,0,0,0.3));
+    width: 50px;
 }
 
-/* Botón de login */
+/* Botón login */
 nav button {
-    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    background: #2563eb;
     border: none;
     color: white;
     padding: 11px 22px;
@@ -45,35 +43,34 @@ nav button {
     cursor: pointer;
     border-radius: 10px;
     font-weight: 600;
-    transition: 0.25s;
-    box-shadow: 0 3px 12px rgba(79,70,229,0.45);
+    transition: 0.2s ease;
 }
 
 nav button:hover {
-    background: #4338ca;
-    transform: translateY(-2px);
+    background: #1e40af;
 }
 
 /* ============================
-   CONTENEDORES
-============================ */
+   CONTENEDOR
+============================= */
 .qs-container {
-    padding: 45px;
+    padding: 40px;
     max-width: 1100px;
     margin: auto;
 }
 
-/* Tarjetas generales */
+/* ============================
+   TARJETAS
+============================= */
 .qs-card {
-    background: rgba(255,255,255,0.75);
-    backdrop-filter: blur(10px);
+    background: #ffffff;
     padding: 35px;
     border-radius: 20px;
 
-    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    box-shadow: 0 4px 25px rgba(0,0,0,0.06);
     margin-bottom: 45px;
 
-    border: 1px solid rgba(255,255,255,0.4);
+    border: 1px solid #e2e8f0;
 }
 
 .qs-card h2, 
@@ -83,55 +80,30 @@ nav button:hover {
 }
 
 .qs-card p {
-    line-height: 1.7;
-    color: #334155;
+    color: #475569;
 }
 
-/* ============================
-   TEAM (Tarjetas del equipo)
-============================ */
-.team-grid {
-    display: flex;
-    gap: 30px;
-    justify-content: center;
-    flex-wrap: wrap;
+/* Listas */
+.qs-card ul {
+    padding-left: 20px;
+    color: #475569;
 }
 
-.team-card {
-    background: rgba(255,255,255,0.85);
-    backdrop-filter: blur(12px);
-    padding: 22px;
-    width: 240px;
-    border-radius: 18px;
-    text-align: center;
-
-    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-    border: 1px solid rgba(255,255,255,0.5);
-
-    transition: 0.25s;
-}
-
-.team-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.18);
-}
-
-.team-card img {
-    width: 100%;
-    border-radius: 10px;
-    margin-bottom: 12px;
+.qs-card li {
+    margin-bottom: 8px;
+    line-height: 1.5;
 }
 
 /* ============================
    BOTÓN PRINCIPAL
-============================ */
+============================= */
 .qs-center {
     text-align: center;
     margin-top: 25px;
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    background: #3b82f6;
     color: white;
     padding: 14px 28px;
     font-size: 17px;
@@ -140,31 +112,30 @@ nav button:hover {
     cursor: pointer;
     font-weight: 600;
 
-    box-shadow: 0 6px 18px rgba(37,99,235,0.35);
-    transition: 0.25s;
+    box-shadow: 0 4px 20px rgba(59,130,246,0.25);
+    transition: 0.25s ease;
 }
 
 .btn-primary:hover {
     background: #1d4ed8;
-    transform: translateY(-2px);
 }
 
 /* ============================
    FOOTER
-============================ */
+============================= */
 footer {
     text-align: center;
     padding: 22px;
-    margin-top: 50px;
-    background: #e2e8f0;
+    margin-top: 40px;
+    background: white;
     color: #475569;
     font-size: 15px;
-    border-top: 1px solid #cbd5e1;
+    border-top: 1px solid #e5e7eb;
 }
 
 /* ============================
    RESPONSIVE
-============================ */
+============================= */
 
 /* Tablets */
 @media (max-width: 900px) {
@@ -176,27 +147,18 @@ footer {
         padding: 28px;
     }
 
-    .team-card {
-        width: 45%;
-        min-width: 200px;
-    }
-
     .qs-header {
         justify-content: center;
         text-align: center;
         flex-direction: column;
-        gap: 15px;
+        gap: 12px;
     }
 }
 
 /* Móviles */
 @media (max-width: 600px) {
     body {
-        background: #f1f5f9;
-    }
-
-    .qs-header {
-        padding: 15px;
+        background: #fafafa;
     }
 
     .qs-container {
@@ -207,27 +169,17 @@ footer {
         padding: 22px;
     }
 
-    .team-grid {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .team-card {
-        width: 90%;
-        max-width: 320px;
-    }
-
     .btn-primary {
-        width: 90%;
-        max-width: 320px;
+        width: 100%;
         padding: 14px;
+        max-width: 350px;
     }
 }
 
 /* Muy pequeño */
 @media (max-width: 360px) {
     .header-logo img {
-        width: 45px;
+        width: 40px;
     }
 
     nav button {

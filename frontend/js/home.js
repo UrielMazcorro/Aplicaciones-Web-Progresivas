@@ -8,10 +8,10 @@ checkSession();
 const userRole = localStorage.getItem('rol_prisn3d') || 'operador';
 console.log("Rol actual:", userRole);
 
-// Si NO es admin, ocultamos el botón grande de "Añadir Impresora"
+// BLOQUEO VISUAL 1: Ocultar botón de añadir si no es admin
 const addPrinterCard = document.getElementById('show-add-modal-btn');
 if (userRole !== 'admin' && addPrinterCard) {
-    addPrinterCard.style.display = 'none';
+    addPrinterCard.style.display = 'none'; // Desaparece el botón "+"
 }
 
 const logoutButton = document.getElementById('logout-btn');
@@ -44,7 +44,7 @@ let latestTemp = 0;
 let latestHum = 0;
 let editingId = null;
 
-// 4. FUNCIONES DE INTERFAZ (LOGS Y GRÁFICA)
+// 4. INTERFAZ
 function actualizarInterfaz(logs) {
     const labels = [], temps = [], hums = [], listHTML = [];
     logs.forEach(log => {
@@ -66,7 +66,7 @@ function actualizarInterfaz(logs) {
     }
 }
 
-// 5. TARJETAS (Lógica Visual de Estado)
+// 5. TARJETAS
 const staticPrinterRules = {
     'printer-1': { minT: 20, maxT: 22 },
     'printer-2': { minT: 23, maxT: 25 },
@@ -91,7 +91,6 @@ function actualizarTarjetasImpresoras() {
 
             const cardId = card.id;
             let rules = staticPrinterRules[cardId] || customPrinterRules[cardId];
-
             let isWarning = false;
             if (rules) {
                 if (latestTemp < rules.minT || latestTemp > rules.maxT) isWarning = true;
@@ -110,7 +109,7 @@ document.body.addEventListener('change', (e) => {
     if (e.target.classList.contains('printer-toggle')) actualizarTarjetasImpresoras();
 });
 
-// 6. CARGAR IMPRESORAS (READ) + FILTRO DE ROL
+// 6. CARGAR IMPRESORAS (READ) + BLOQUEO VISUAL 2
 async function cargarImpresorasGuardadas() {
     try {
         const res = await fetch('/api/impresoras');
@@ -126,7 +125,7 @@ async function cargarImpresorasGuardadas() {
             div.id = p.id;
             const datosJson = JSON.stringify(p).replace(/"/g, '&quot;');
 
-            // --- LOGICA PARA OCULTAR BOTONES SI NO ES ADMIN ---
+            // BLOQUEO VISUAL 2: Solo generamos botones si es ADMIN
             let botonesHTML = '';
             if (userRole === 'admin') {
                 botonesHTML = `
@@ -135,8 +134,10 @@ async function cargarImpresorasGuardadas() {
                        <button class="btn-delete" data-id="${p.id}">🗑️ Eliminar</button>
                     </div>
                 `;
+            } else {
+                // Si es operador, dejamos el espacio vacío
+                botonesHTML = `<div style="margin-bottom: 10px;"></div>`;
             }
-            // --------------------------------------------------
 
             div.innerHTML = `
                 <h3>${p.name}</h3>
@@ -165,7 +166,7 @@ async function cargarImpresorasGuardadas() {
             container.appendChild(div);
         });
         
-        // Solo agregamos listeners si los botones existen (si es admin)
+        // Solo agregamos listeners a los botones si existen (si es admin)
         if (userRole === 'admin') {
             agregarListenersBotones();
         }
@@ -173,10 +174,13 @@ async function cargarImpresorasGuardadas() {
     } catch (e) { console.error("Error cargando impresoras", e); }
 }
 
-// 7. LISTENERS (SOLO ADMIN)
+// 7. LISTENERS (Solo Admin)
 function agregarListenersBotones() {
     document.querySelectorAll('.btn-delete').forEach(btn => {
         btn.addEventListener('click', async (e) => {
+            // SEGURIDAD LÓGICA EXTRA
+            if(userRole !== 'admin') return alert("No tienes permisos de Administrador.");
+
             const id = e.target.closest('.btn-delete').dataset.id;
             if(confirm("¿Estás seguro de eliminar esta impresora?")) {
                 try {
@@ -191,6 +195,9 @@ function agregarListenersBotones() {
 
     document.querySelectorAll('.btn-edit').forEach(btn => {
         btn.addEventListener('click', (e) => {
+            // SEGURIDAD LÓGICA EXTRA
+            if(userRole !== 'admin') return alert("No tienes permisos de Administrador.");
+
             const btnElem = e.target.closest('.btn-edit');
             const printer = JSON.parse(btnElem.dataset.printer);
             abrirModalEditar(printer);
@@ -198,7 +205,7 @@ function agregarListenersBotones() {
     });
 }
 
-// 8. GESTIÓN DEL MODAL (SOLO ADMIN)
+// 8. MODAL
 const modal = document.getElementById('add-printer-modal');
 const showBtn = document.getElementById('show-add-modal-btn');
 const closeBtn = document.getElementById('modal-close-btn');
@@ -207,6 +214,9 @@ const modalTitle = document.getElementById('modal-title');
 const submitBtn = document.getElementById('modal-submit-btn');
 
 if (showBtn) showBtn.addEventListener('click', () => {
+    // SEGURIDAD LÓGICA EXTRA
+    if(userRole !== 'admin') return alert("No tienes permisos para agregar impresoras.");
+
     editingId = null;
     addForm.reset();
     modalTitle.textContent = "Añadir Nueva Impresora";
@@ -249,10 +259,14 @@ document.querySelectorAll('.preset-btn').forEach(btn => {
     });
 });
 
-// 9. ENVÍO FORMULARIO (SOLO ADMIN)
+// 9. ENVÍO FORMULARIO
 if (addForm) {
     addForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        // SEGURIDAD LÓGICA EXTRA
+        if(userRole !== 'admin') return alert("Acción denegada: Solo administradores.");
+
         const data = {
             name: document.getElementById('new-printer-name').value,
             type: document.getElementById('new-printer-type').value,

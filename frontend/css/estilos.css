@@ -1,10 +1,10 @@
-/* Reset y Estilos Generales */
+/* Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     text-decoration: none;
-    font-family: 'Roboto', sans-serif;
+    font-family: sans-serif;    
 }
 
 body {
@@ -13,16 +13,13 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh; /* Asegura que ocupe toda la altura */
 }
 
 main {
     width: 100%;
     padding: 20px;
     margin: auto;
+    margin-top: 100px;
 }
 
 .contenedor__todo {
@@ -32,15 +29,13 @@ main {
     position: relative;
 }
 
-/* Caja Trasera (Botones transparentes) */
 .caja__trasera {
     width: 100%;
     padding: 10px 20px;
     display: flex;
     justify-content: center;
-    backdrop-filter: blur(10px);
-    background-color: rgba(0, 128, 255, 0.5); /* Ajusté el color para que se note más */
-    border-radius: 20px; /* Bordes redondeados */
+    backdrop-filter: blur(5px);
+    background-color: rgba(82, 67, 67, 0.319);
 }
 
 .caja__trasera div {
@@ -68,22 +63,21 @@ main {
     cursor: pointer;
     color: white;
     transition: all 300ms;
-    border-radius: 8px;
 }
 
 .caja__trasera button:hover {
     background: #fff;
-    color: #46A2FD;
+    color: black;
 }
 
-/* Contenedor del Formulario Blanco (El que se mueve) */
+/* Contenedor de login y registro */
 .contenedor__login-register {
     display: flex;
     align-items: center;
     width: 100%;
     max-width: 380px;
     position: relative;
-    top: -185px; /* Posición para escritorio */
+    top: -185px;
     left: 10px;
     transition: left 500ms cubic-bezier(0.175, 0.885, 0.320, 1.275);
 }
@@ -99,8 +93,6 @@ main {
 .contenedor__login-register form h2 {
     text-align: center;
     font-size: 30px;
-    margin-bottom: 20px;
-    color: #46A2FD;
 }
 
 .contenedor__login-register form input {
@@ -119,74 +111,20 @@ main {
     margin-top: 40px;
     border: none;
     font-size: 14px;
-    background: #46A2FD;
-    color: white;
+    background: black;
+    color: #f2f2f2;
     cursor: pointer;
     border-radius: 8px;
-    width: 100%; /* Botón ancho completo */
-    font-weight: bold;
 }
 
+/* Estados de formularios */
 .formulario__login {
     opacity: 1;
     display: block;
+    z-index: 2;
 }
 
 .formulario__register {
     display: none;
-}
-
-/* ==========================================
-   RESPONSIVE DESIGN (MÓVILES)
-   ========================================== */
-@media screen and (max-width: 850px) {
-    
-    main {
-        margin-top: 50px;
-    }
-
-    .caja__trasera {
-        height: 300px; /* Altura fija para contener los textos */
-        flex-direction: column; /* Poner textos uno encima de otro */
-        align-items: center;
-        margin: auto;
-    }
-
-    .caja__trasera div {
-        margin: 0px;
-        position: absolute;
-        text-align: center;
-    }
-
-    /* Texto de Login arriba */
-    .caja__trasera-login {
-        top: 20px; 
-        /* Ocultamos elementos innecesarios en móvil para ahorrar espacio */
-    }
-    
-    /* Texto de Registro abajo */
-    .caja__trasera-register {
-        bottom: 20px;
-    }
-
-    .caja__trasera div h3 {
-        font-size: 20px; /* Texto más pequeño */
-    }
-
-    .caja__trasera button {
-        padding: 8px 20px; /* Botón más pequeño */
-        margin-top: 10px;
-    }
-
-    /* Ajuste del cuadro blanco flotante */
-    .contenedor__login-register {
-        top: -240px; /* Subimos el formulario para que quede al centro */
-        left: 0 !important; /* Forzamos que esté centrado, ignorando JS */
-        margin: auto;
-        width: 100%;
-    }
-
-    .contenedor__login-register form {
-        position: relative; /* Ya no absoluto para que fluya mejor */
-    }
+    z-index: 1;
 }

@@ -3,9 +3,9 @@
 ============================= */
 body {
     margin: 0;
-    font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: #f8fafc; /* Un gris azulado muy suave, más moderno */
-    color: #334155;      /* Gris oscuro suave para leer mejor */
+    font-family: "Inter", Arial, sans-serif;
+    background: #f5f7fa;
+    color: #1e293b;
     line-height: 1.6;
 }
 
@@ -14,14 +14,13 @@ body {
 ============================= */
 .qs-header {
     background: white;
-    padding: 15px 5%; /* Porcentaje para adaptarse mejor */
+    padding: 18px 35px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #e2e8f0;
-    position: sticky; /* Se queda fijo al bajar */
-    top: 0;
-    z-index: 100;
+    flex-wrap: wrap;
+
+    border-bottom: 1px solid #e5e7eb;
 }
 
 .header-logo {
@@ -31,176 +30,94 @@ body {
 }
 
 .header-logo img {
-    width: 45px;
-    height: 45px;
-    border-radius: 8px; /* Suavizar bordes del logo */
+    width: 50px;
 }
 
-.header-logo h1 {
-    font-size: 1.5rem;
-    color: #0f172a;
-    margin: 0;
-}
-
-/* Botón login del header */
+/* Botón login */
 nav button {
-    background: transparent;
-    border: 2px solid #2563eb;
-    color: #2563eb;
-    padding: 8px 20px;
-    font-size: 14px;
+    background: #2563eb;
+    border: none;
+    color: white;
+    padding: 11px 22px;
+    font-size: 15px;
     cursor: pointer;
-    border-radius: 50px; /* Botón redondeado moderno */
-    font-weight: 700;
-    transition: all 0.2s ease;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.2s ease;
 }
 
 nav button:hover {
-    background: #2563eb;
-    color: white;
+    background: #1e40af;
 }
 
 /* ============================
-   CONTENEDOR PRINCIPAL
+   CONTENEDOR
 ============================= */
 .qs-container {
-    padding: 40px 20px;
-    max-width: 900px; /* Un poco más estrecho para facilitar la lectura */
+    padding: 40px;
+    max-width: 1100px;
     margin: auto;
 }
 
 /* ============================
-   TARJETAS (SECCIONES)
+   TARJETAS
 ============================= */
 .qs-card {
     background: #ffffff;
-    padding: 40px;
-    border-radius: 24px;
-    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05); /* Sombra suave y elegante */
-    margin-bottom: 40px;
-    border: 1px solid #f1f5f9;
+    padding: 35px;
+    border-radius: 20px;
+
+    box-shadow: 0 4px 25px rgba(0,0,0,0.06);
+    margin-bottom: 45px;
+
+    border: 1px solid #e2e8f0;
 }
 
-.qs-card h2 {
-    color: #1e293b;
-    font-weight: 800;
-    font-size: 1.8rem;
-    margin-top: 0;
-    margin-bottom: 20px;
-    letter-spacing: -0.5px; /* Tight tracking para títulos modernos */
+.qs-card h2, 
+.qs-card h3 {
+    color: #0f172a;
+    font-weight: 700;
 }
 
 .qs-card p {
-    font-size: 1.1rem;
     color: #475569;
-    margin-bottom: 20px;
 }
 
-/* ============================
-   LISTA DE BENEFICIOS (Cama/Ambiente)
-============================= */
-/* Hacemos que la lista se vea como "tarjetas" pequeñas */
+/* Listas */
 .qs-card ul {
-    padding: 0;
-    list-style: none;
-    margin-top: 30px;
+    padding-left: 20px;
+    color: #475569;
 }
 
 .qs-card li {
-    background: #f1f5f9;
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 15px;
-    border-left: 5px solid #3b82f6; /* Línea azul a la izquierda para destacar */
-}
-
-.qs-card li strong {
-    color: #0f172a;
-    font-size: 1.05rem;
+    margin-bottom: 8px;
+    line-height: 1.5;
 }
 
 /* ============================
-   SECCIÓN EQUIPO (NUEVO)
-============================= */
-.qs-team {
-    margin-top: 60px;
-    margin-bottom: 60px;
-}
-
-.qs-team h2 {
-    text-align: center;
-    font-size: 1.8rem;
-    color: #1e293b;
-    margin-bottom: 30px;
-}
-
-.team-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-}
-
-.team-card {
-    background: white;
-    padding: 30px;
-    border-radius: 20px;
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-    border: 1px solid #e2e8f0;
-    transition: transform 0.2s ease;
-}
-
-.team-card:hover {
-    transform: translateY(-5px); /* Efecto de flotar al pasar el mouse */
-}
-
-.team-card img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 15px;
-    background-color: #f1f5f9;
-}
-
-.team-card h4 {
-    margin: 0;
-    font-size: 1.1rem;
-    color: #0f172a;
-}
-
-.team-card p {
-    margin: 5px 0 0;
-    font-size: 0.9rem;
-    color: #64748b;
-}
-
-/* ============================
-   BOTÓN CTA (COMENZAR AHORA)
+   BOTÓN PRINCIPAL
 ============================= */
 .qs-center {
     text-align: center;
-    margin-top: 40px;
-    margin-bottom: 60px;
+    margin-top: 25px;
 }
 
 .btn-primary {
-    background: #2563eb; /* Azul intenso */
+    background: #3b82f6;
     color: white;
-    padding: 18px 40px;
-    font-size: 1.2rem;
+    padding: 14px 28px;
+    font-size: 17px;
     border: none;
-    border-radius: 50px;
+    border-radius: 12px;
     cursor: pointer;
-    font-weight: 700;
-    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3); /* Sombra azul brillante */
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-weight: 600;
+
+    box-shadow: 0 4px 20px rgba(59,130,246,0.25);
+    transition: 0.25s ease;
 }
 
 .btn-primary:hover {
     background: #1d4ed8;
-    transform: scale(1.05); /* Crece un poquito */
-    box-shadow: 0 15px 35px rgba(37, 99, 235, 0.4);
 }
 
 /* ============================
@@ -208,11 +125,12 @@ nav button:hover {
 ============================= */
 footer {
     text-align: center;
-    padding: 40px 20px;
+    padding: 22px;
+    margin-top: 40px;
     background: white;
-    color: #94a3b8;
-    font-size: 0.9rem;
-    border-top: 1px solid #f1f5f9;
+    color: #475569;
+    font-size: 15px;
+    border-top: 1px solid #e5e7eb;
 }
 
 /* ============================
@@ -221,30 +139,50 @@ footer {
 
 /* Tablets */
 @media (max-width: 900px) {
+    .qs-container {
+        padding: 25px;
+    }
+
     .qs-card {
-        padding: 30px;
+        padding: 28px;
+    }
+
+    .qs-header {
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+        gap: 12px;
     }
 }
 
 /* Móviles */
 @media (max-width: 600px) {
-    .qs-header {
-        flex-direction: column;
-        gap: 15px;
+    body {
+        background: #fafafa;
+    }
+
+    .qs-container {
         padding: 15px;
     }
 
-    .qs-card h2 {
-        font-size: 1.5rem;
+    .qs-card {
+        padding: 22px;
     }
 
     .btn-primary {
         width: 100%;
-        padding: 15px;
-        font-size: 1.1rem;
+        padding: 14px;
+        max-width: 350px;
     }
-    
-    .team-grid {
-        grid-template-columns: 1fr; /* Una columna en celular */
+}
+
+/* Muy pequeño */
+@media (max-width: 360px) {
+    .header-logo img {
+        width: 40px;
+    }
+
+    nav button {
+        padding: 8px 15px;
     }
 }

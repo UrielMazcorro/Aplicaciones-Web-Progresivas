@@ -1,69 +1,60 @@
-// script.js
+window.onload = function() {
+    // Agregar eventos a los botones
+    document.getElementById("btn_iniciar-sesion").addEventListener("click", iniciarSesion);
+    document.getElementById("btn_registrarse").addEventListener("click", register);
+    window.addEventListener("resize", anchoPagina);
 
-// Ejecutar al cargar y al redimensionar
-window.addEventListener("resize", anchoPagina);
-window.addEventListener("load", anchoPagina);
+    // Declaración de variables
+    var contenedor_login_register = document.querySelector(".contenedor__login-register");
+    var formulario_login = document.querySelector(".formulario__login");
+    var formulario_register = document.querySelector(".formulario__register");
+    var caja_trasera_login = document.querySelector(".caja__trasera-login");
+    var caja_trasera_register = document.querySelector(".caja__trasera-register");
 
-// Variables
-var contenedor_login_register = document.querySelector(".contenedor__login-register");
-var formulario_login = document.querySelector(".formulario__login");
-var formulario_register = document.querySelector(".formulario__register");
-var caja_trasera_login = document.querySelector(".caja__trasera-login");
-var caja_trasera_register = document.querySelector(".caja__trasera-register");
+    // Configuración inicial en función del ancho de la página
+    anchoPagina();
 
-// Eventos Click
-document.getElementById("btn_iniciar-sesion").addEventListener("click", iniciarSesion);
-document.getElementById("btn_registrarse").addEventListener("click", register);
-
-function anchoPagina() {
-    if (window.innerWidth > 850) {
-        // Escritorio: Todo visible, posición inicial
-        caja_trasera_login.style.display = "block";
-        caja_trasera_register.style.display = "block";
-    } else {
-        // Móvil: Preparamos el estado inicial
-        caja_trasera_register.style.display = "block";
-        caja_trasera_register.style.opacity = "1";
-        caja_trasera_login.style.display = "none"; // Ocultamos uno para ahorrar espacio
-        formulario_login.style.display = "block";
-        formulario_register.style.display = "none";
-        contenedor_login_register.style.left = "0px";
+    function anchoPagina() {
+        if (window.innerWidth > 850) {
+            caja_trasera_login.style.display = "block";
+            caja_trasera_register.style.display = "block";
+        } else {
+            caja_trasera_register.style.display = "block";
+            caja_trasera_register.style.opacity = "1";
+            caja_trasera_login.style.display = "block";
+            contenedor_login_register.style.left = "0";
+        }
     }
-}
 
-function iniciarSesion() {
-    if (window.innerWidth > 850) {
-        // Lógica Escritorio
-        formulario_register.style.display = "none";
-        contenedor_login_register.style.left = "10px";
-        formulario_login.style.display = "block";
-        caja_trasera_register.style.opacity = "1";
-        caja_trasera_login.style.opacity = "0";
-    } else {
-        // Lógica Móvil
-        formulario_register.style.display = "none";
-        contenedor_login_register.style.left = "0px";
-        formulario_login.style.display = "block";
-        caja_trasera_register.style.display = "block"; // Mostramos la opción de registrarse
-        caja_trasera_login.style.display = "none";     // Ocultamos la opción de login (porque ya estamos ahí)
+    function iniciarSesion() {
+        if (window.innerWidth > 850) {
+            formulario_register.style.display = "none";
+            contenedor_login_register.style.left = "10px";
+            formulario_login.style.display = "block";
+            caja_trasera_register.style.opacity = "1";
+            caja_trasera_login.style.opacity = "0";
+        } else {
+            formulario_register.style.display = "none";
+            contenedor_login_register.style.left = "0px";
+            formulario_login.style.display = "block";
+            caja_trasera_register.style.opacity = "1";
+            caja_trasera_login.style.opacity = "0";
+        }
     }
-}
 
-function register() {
-    if (window.innerWidth > 850) {
-        // Lógica Escritorio
-        formulario_register.style.display = "block";
-        contenedor_login_register.style.left = "410px";
-        formulario_login.style.display = "none";
-        caja_trasera_register.style.opacity = "0";
-        caja_trasera_login.style.opacity = "1";
-    } else {
-        // Lógica Móvil
-        formulario_register.style.display = "block";
-        contenedor_login_register.style.left = "0px";
-        formulario_login.style.display = "none";
-        caja_trasera_register.style.display = "none";  // Ocultamos la opción de registrarse
-        caja_trasera_login.style.display = "block";    // Mostramos la opción de login
-        caja_trasera_login.style.opacity = "1";
+    function register() {
+        if (window.innerWidth > 850) {
+            formulario_register.style.display = "block";
+            contenedor_login_register.style.left = "410px";
+            formulario_login.style.display = "none";
+            caja_trasera_register.style.opacity = "0";
+            caja_trasera_login.style.opacity = "1";
+        } else {
+            formulario_register.style.display = "block";
+            contenedor_login_register.style.left = "0px";
+            formulario_login.style.display = "none";
+            caja_trasera_register.style.opacity = "0";
+            caja_trasera_login.style.opacity = "1";
+        }
     }
-}
+};

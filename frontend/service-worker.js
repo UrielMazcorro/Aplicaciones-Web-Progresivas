@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-prisn3d-v4.7';
+const CACHE_NAME = 'pwa-prisn3d-v4.8';
 const urlsToCache = [
   '/frontend/index.html',
   '/frontend/home.html',

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PRISN3D - Quiénes Somos</title>
+    <title>PRISN3D - Soluciones 3D</title>
 
     <link rel="stylesheet" href="/frontend/css/quienes.css">
     <link rel="manifest" href="/frontend/manifest.json">
@@ -18,80 +18,65 @@
         </div>
 
         <nav>
-            <button id="go-login">Iniciar Sesión / Registrarse</button>
+            <button id="go-login">Ingresar</button>
         </nav>
     </header>
 
     <main class="qs-container">
 
-        <!-- Sección Quiénes Somos -->
         <section class="qs-card">
-            <h2>Quiénes Somos</h2>
-
+            <h2>Deja de perder tiempo y filamento</h2>
             <p>
-                En <strong>PRISN3D</strong> desarrollamos soluciones inteligentes de monitoreo para impresoras 3D,
-                control ambiental y automatización de talleres y entornos de producción.
-            </p>
-
-            <p>
-                Nuestra tecnología está diseñada para ser accesible, moderna y fácil de usar,
-                permitiendo a creadores, escuelas y empresas mejorar su productividad.
-            </p>
-
-            <h3>Misión</h3>
-            <p>
-                Optimizar los procesos de impresión 3D mediante análisis de datos, automatización
-                y monitoreo en tiempo real.
-            </p>
-
-            <h3>Visión</h3>
-            <p>
-                Ser la plataforma líder de gestión y monitoreo de impresión 3D en Latinoamérica.
+                <strong>PRISN3D</strong> es el guardián de tus impresoras. 
+                Te brindamos tranquilidad monitoreando las variables críticas de tu taller 
+                para que tus impresiones terminen con éxito, incluso mientras duermes.
             </p>
         </section>
 
-        <!-- Sección Producto -->
         <section class="qs-card">
-            <h2>¿Qué es PRISN3D?</h2>
-
+            <h2>Monitoreo donde realmente importa</h2>
             <p>
-                PRISN3D es un sistema de monitoreo creado para mejorar la calidad y seguridad de tus impresiones 3D. 
-                Diseñado para cualquier tipo de usuario, ofrece datos en tiempo real que te ayudan a evitar fallas y optimizar resultados.
+                La mayoría de los fallos ocurren por cambios de temperatura. Nosotros los vigilamos por ti:
             </p>
 
-            <h3>Monitoreo Inteligente de Temperatura</h3>
-            <p>
-                Controla los dos factores que más influyen en la calidad de impresión:
-            </p>
-
-            <ul>
-                <li><strong>Temperatura de la cama caliente</strong> para evitar falta de adherencia y deformaciones.</li>
-                <li><strong>Temperatura del ambiente</strong> para mantener condiciones estables durante todo el proceso.</li>
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 15px;">
+                    🔥 <strong>La Cama Caliente:</strong> 
+                    <br>Detectamos si se enfría antes de tiempo para evitar que la pieza se despegue (Warping).
+                </li>
+                <li style="margin-bottom: 15px;">
+                    🌡️ <strong>El Ambiente del Taller:</strong> 
+                    <br>Aseguramos que la habitación tenga la temperatura estable, vital para materiales sensibles.
+                </li>
+                <li>
+                    📲 <strong>Tu Taller en el Bolsillo:</strong> 
+                    <br>Accede a los datos en tiempo real desde tu celular o computadora.
+                </li>
             </ul>
 
-            <p>
-                Recibe alertas instantáneas cuando algo sale de rango y reduce el riesgo de impresiones fallidas.
-            </p>
-
-            <h3>Siempre Conectado</h3>
-            <p>
-                Consulta tus impresoras desde tu teléfono, tablet o computadora, con datos guardados en la nube y accesibles en cualquier momento.
-            </p>
-
-            <ul>
-                <li>Historial de temperaturas.</li>
-                <li>Alertas por variaciones bruscas.</li>
-                <li>Supervisión remota segura.</li>
-            </ul>
-
-            <p style="font-size: 18px; font-weight: 600; margin-top: 20px; color:#1d4ed8;">
-                Más control, menos fallas. Imprime con confianza.
+            <p style="text-align: center; font-weight: bold; color: #1d4ed8; margin-top: 20px;">
+                ¡Protege tu producción y automatiza tu éxito!
             </p>
         </section>
 
+        <section class="qs-team">
+            <h2>Respaldado por Expertos</h2>
+            <div class="team-grid">
+                <div class="team-card">
+                    <img src="/frontend/imagenes/logo.png" alt="Equipo">
+                    <h4>Innovación</h4>
+                    <p>Especialistas en IoT.</p>
+                </div>
+                <div class="team-card">
+                    <img src="/frontend/imagenes/logo.png" alt="Equipo">
+                    <h4>Ingeniería</h4>
+                    <p>Pasión por el 3D.</p>
+                </div>
+            </div>
+        </section>
 
         <div class="qs-center">
-            <button class="btn-primary" id="btn-ir-login">Ir al Login</button>
+            <button class="btn-primary" id="btn-ir-login">Comenzar Ahora</button>
         </div>
 
     </main>
@@ -101,13 +86,9 @@
     </footer>
 
     <script>
-        document.getElementById("go-login").onclick = () => {
-            window.location.href = "/frontend/index.html";
-        };
-
-        document.getElementById("btn-ir-login").onclick = () => {
-            window.location.href = "/frontend/index.html";
-        };
+        const irLogin = () => window.location.href = "/frontend/index.html";
+        document.getElementById("go-login").onclick = irLogin;
+        document.getElementById("btn-ir-login").onclick = irLogin;
     </script>
 
 </body>

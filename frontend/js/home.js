@@ -1,8 +1,18 @@
 // frontend/js/home.js
 import { checkSession, logout } from '/frontend/js/main.js';
 
-// 1. SEGURIDAD Y SESIÓN
+// 1. SEGURIDAD
 checkSession();
+
+// --- OBTENER ROL DEL USUARIO ---
+const userRole = localStorage.getItem('rol_prisn3d') || 'operador';
+console.log("Rol actual:", userRole);
+
+// Si NO es admin, ocultamos el botón grande de "Añadir Impresora"
+const addPrinterCard = document.getElementById('show-add-modal-btn');
+if (userRole !== 'admin' && addPrinterCard) {
+    addPrinterCard.style.display = 'none';
+}
 
 const logoutButton = document.getElementById('logout-btn');
 if (logoutButton) {
@@ -28,13 +38,13 @@ const sensorChart = new Chart(ctx, {
     }
 });
 
-// 3. VARIABLES GLOBALES
+// 3. VARIABLES
 const logListElement = document.getElementById('log-list');
 let latestTemp = 0;
 let latestHum = 0;
 let editingId = null;
 
-// 4. FUNCIONES DE INTERFAZ
+// 4. FUNCIONES DE INTERFAZ (LOGS Y GRÁFICA)
 function actualizarInterfaz(logs) {
     const labels = [], temps = [], hums = [], listHTML = [];
     logs.forEach(log => {
@@ -56,7 +66,7 @@ function actualizarInterfaz(logs) {
     }
 }
 
-// 5. TARJETAS (Lógica Visual)
+// 5. TARJETAS (Lógica Visual de Estado)
 const staticPrinterRules = {
     'printer-1': { minT: 20, maxT: 22 },
     'printer-2': { minT: 23, maxT: 25 },
@@ -100,7 +110,7 @@ document.body.addEventListener('change', (e) => {
     if (e.target.classList.contains('printer-toggle')) actualizarTarjetasImpresoras();
 });
 
-// 6. CARGAR IMPRESORAS (READ)
+// 6. CARGAR IMPRESORAS (READ) + FILTRO DE ROL
 async function cargarImpresorasGuardadas() {
     try {
         const res = await fetch('/api/impresoras');
@@ -116,12 +126,21 @@ async function cargarImpresorasGuardadas() {
             div.id = p.id;
             const datosJson = JSON.stringify(p).replace(/"/g, '&quot;');
 
+            // --- LOGICA PARA OCULTAR BOTONES SI NO ES ADMIN ---
+            let botonesHTML = '';
+            if (userRole === 'admin') {
+                botonesHTML = `
+                    <div class="card-actions">
+                       <button class="btn-edit" data-printer="${datosJson}">✏️ Editar</button>
+                       <button class="btn-delete" data-id="${p.id}">🗑️ Eliminar</button>
+                    </div>
+                `;
+            }
+            // --------------------------------------------------
+
             div.innerHTML = `
                 <h3>${p.name}</h3>
-                <div class="card-actions">
-                   <button class="btn-edit" data-printer="${datosJson}">Editar</button>
-                   <button class="btn-delete" data-id="${p.id}">Eliminar</button>
-                </div>
+                ${botonesHTML}
                 <ul>
                     <li><strong>Tipo:</strong> ${p.type}</li>
                     <li><strong>Vol:</strong> ${p.volume}</li>
@@ -145,11 +164,16 @@ async function cargarImpresorasGuardadas() {
             `;
             container.appendChild(div);
         });
-        agregarListenersBotones();
+        
+        // Solo agregamos listeners si los botones existen (si es admin)
+        if (userRole === 'admin') {
+            agregarListenersBotones();
+        }
+
     } catch (e) { console.error("Error cargando impresoras", e); }
 }
 
-// 7. LISTENERS EDITAR/ELIMINAR
+// 7. LISTENERS (SOLO ADMIN)
 function agregarListenersBotones() {
     document.querySelectorAll('.btn-delete').forEach(btn => {
         btn.addEventListener('click', async (e) => {
@@ -158,9 +182,8 @@ function agregarListenersBotones() {
                 try {
                     const res = await fetch(`/api/impresoras/${id}`, { method: 'DELETE' });
                     const data = await res.json();
-                    if (data.success) {
-                        cargarImpresorasGuardadas();
-                    } else { alert("Error al eliminar"); }
+                    if (data.success) cargarImpresorasGuardadas();
+                    else alert("Error al eliminar");
                 } catch (err) { alert("Error de conexión"); }
             }
         });
@@ -175,7 +198,7 @@ function agregarListenersBotones() {
     });
 }
 
-// 8. GESTIÓN DEL MODAL
+// 8. GESTIÓN DEL MODAL (SOLO ADMIN)
 const modal = document.getElementById('add-printer-modal');
 const showBtn = document.getElementById('show-add-modal-btn');
 const closeBtn = document.getElementById('modal-close-btn');
@@ -210,7 +233,6 @@ function abrirModalEditar(printer) {
 if (closeBtn) closeBtn.addEventListener('click', () => modal.style.display = 'none');
 window.addEventListener('click', (e) => { if (e.target == modal) modal.style.display = 'none'; });
 
-// 9. LOGICA DE PRESETS
 document.querySelectorAll('.preset-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
         const data = e.target.dataset;
@@ -227,7 +249,7 @@ document.querySelectorAll('.preset-btn').forEach(btn => {
     });
 });
 
-// 10. ENVÍO DEL FORMULARIO
+// 9. ENVÍO FORMULARIO (SOLO ADMIN)
 if (addForm) {
     addForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -248,8 +270,7 @@ if (addForm) {
             if (editingId) { url = `/api/impresoras/${editingId}`; method = 'PUT'; }
 
             const res = await fetch(url, {
-                method,
-                headers: {'Content-Type':'application/json'},
+                method, headers: {'Content-Type':'application/json'},
                 body: JSON.stringify(data)
             });
             const result = await res.json();
@@ -263,39 +284,28 @@ if (addForm) {
     });
 }
 
-// 11. SOCKET.IO REALTIME
+// 10. SOCKET.IO & INICIO
 const socket = io();
-
 socket.on('sensor_update', data => {
     if (!data) return;
-
     latestTemp = data.temperatura;
     latestHum = data.humedad;
-
-    // --- Actualizar gráfica
     const timeStr = new Date().toLocaleTimeString('es-ES');
     sensorChart.data.labels.push(timeStr);
     sensorChart.data.datasets[0].data.push(latestTemp);
     sensorChart.data.datasets[1].data.push(latestHum);
-
     if(sensorChart.data.labels.length > 15) {
         sensorChart.data.labels.shift();
         sensorChart.data.datasets[0].data.shift();
         sensorChart.data.datasets[1].data.shift();
     }
     sensorChart.update();
-
-    // --- Actualizar logs
     const newLog = document.createElement('li');
     newLog.textContent = `[${timeStr}] T: ${latestTemp}°C | H: ${latestHum}%`;
     logListElement.prepend(newLog);
-
-    // --- Actualizar tarjetas
     actualizarTarjetasImpresoras();
 });
 
-// 12. INICIALIZACIÓN
-// fetch inicial de histórico
 (async () => {
     try {
         const response = await fetch('/api/sensores');
@@ -305,6 +315,5 @@ socket.on('sensor_update', data => {
             actualizarInterfaz(logsArray);
         }
     } catch(e){ console.error(e); }
-
     cargarImpresorasGuardadas();
 })();

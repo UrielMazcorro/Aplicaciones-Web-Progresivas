@@ -25,7 +25,10 @@ if (formLogin) {
             const data = await response.json();
 
             if (data.success) {
+                // 💾 GUARDAMOS EL ROL QUE VIENE DE LA BASE DE DATOS
                 localStorage.setItem('usuario_prisn3d', data.email);
+                localStorage.setItem('rol_prisn3d', data.role); // 'admin' u 'operador'
+                
                 window.location.href = "/frontend/home.html";
             } else {
                 alert("Error: " + (data.error || "Datos incorrectos"));
@@ -33,6 +36,7 @@ if (formLogin) {
                 btn.disabled = false;
             }
         } catch (error) {
+            console.error(error);
             alert("Error de conexión con el servidor.");
             btn.textContent = originalText;
             btn.disabled = false;
@@ -40,12 +44,12 @@ if (formLogin) {
     });
 }
 
-// --- REGISTRO (ACTIVADO) ---
+// --- REGISTRO ---
 if (formRegister) {
     formRegister.addEventListener("submit", async (e) => {
         e.preventDefault();
         const email = formRegister.querySelector('input[placeholder="Correo Electrónico"]').value;
-        const password = formRegister.querySelector('input[placeholder="Contraseña"]').value; // Asegúrate que el HTML tenga este input si pides nombre, etc.
+        const password = formRegister.querySelector('input[placeholder="Contraseña"]').value;
         const btn = formRegister.querySelector('button');
         const originalText = btn.textContent;
 
@@ -62,11 +66,10 @@ if (formRegister) {
             const data = await response.json();
 
             if (data.success) {
-                alert("¡Registro exitoso! Ahora inicia sesión.");
-                // Opcional: recargar o mover al login form visualmente
+                alert("Registro exitoso. Tu cuenta se creó como 'Operador'. Inicia sesión.");
                 location.reload(); 
             } else {
-                alert("Error al registrar: " + (data.error || "Intenta de nuevo"));
+                alert("Error: " + (data.error || "Intenta de nuevo"));
                 btn.textContent = originalText;
                 btn.disabled = false;
             }
